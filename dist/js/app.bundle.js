@@ -24,6 +24,10 @@ var _AutoComplete = __webpack_require__(112);
 
 var _AutoComplete2 = _interopRequireDefault(_AutoComplete);
 
+var _Layer = __webpack_require__(113);
+
+var _Layer2 = _interopRequireDefault(_Layer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -35,18 +39,55 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var IndexView = function (_React$Component) {
 	_inherits(IndexView, _React$Component);
 
-	function IndexView() {
+	function IndexView(props) {
 		_classCallCheck(this, IndexView);
 
-		return _possibleConstructorReturn(this, (IndexView.__proto__ || Object.getPrototypeOf(IndexView)).apply(this, arguments));
+		var _this = _possibleConstructorReturn(this, (IndexView.__proto__ || Object.getPrototypeOf(IndexView)).call(this, props));
+
+		_this.state = {
+			visible: false,
+			animation: 'zoom'
+		};
+		return _this;
 	}
 
 	_createClass(IndexView, [{
+		key: 'show',
+		value: function show(animation) {
+			this.setState({
+				animation: animation,
+				visible: true
+			});
+		}
+	}, {
+		key: 'hide',
+		value: function hide() {
+			this.setState({
+				visible: false
+			});
+		}
+	}, {
 		key: 'test',
 		value: function test() {}
 	}, {
 		key: 'render',
 		value: function render() {
+			var _this2 = this;
+
+			var types = ['zoom', 'fade', 'flip', 'door', 'rotate', 'slideUp', 'slideDown', 'slideLeft', 'slideRight'];
+			var buttons = types.map(function (value, index) {
+				var style = {
+					animationDelay: index * 100 + 'ms',
+					WebkitAnimationDelay: index * 100 + 'ms'
+				};
+
+				return _react2.default.createElement(
+					'button',
+					{ key: index, className: 'btn scale', onClick: _this2.show.bind(_this2, value), style: style },
+					value
+				);
+			});
+
 			return _react2.default.createElement(
 				'div',
 				null,
@@ -54,7 +95,43 @@ var IndexView = function (_React$Component) {
 					value: '',
 					options: ['10000（一涛）', '10001（张三）'],
 					onValueChange: this.test
-				})
+				}),
+				_react2.default.createElement(
+					'div',
+					{ style: { marginTop: '100px' } },
+					_react2.default.createElement(
+						'div',
+						{ className: 'btn-area' },
+						buttons
+					),
+					_react2.default.createElement(
+						_Layer2.default,
+						{ visible: this.state.visible,
+							onClose: this.hide.bind(this),
+							animation: this.state.animation
+						},
+						_react2.default.createElement(
+							'div',
+							{ className: 'header' },
+							'Layer'
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'body' },
+							'A React modal with animation.'
+						),
+						_react2.default.createElement(
+							'button',
+							{ className: 'layer-confirm-btn', onClick: this.hide.bind(this) },
+							'ok'
+						),
+						_react2.default.createElement(
+							'button',
+							{ className: 'layer-cancel-btn', onClick: this.hide.bind(this) },
+							'close'
+						)
+					)
+				)
 			);
 		}
 	}]);
@@ -85,7 +162,7 @@ var _react = __webpack_require__(6);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _autoComplete = __webpack_require__(113);
+var _autoComplete = __webpack_require__(114);
 
 var _autoComplete2 = _interopRequireDefault(_autoComplete);
 
@@ -289,13 +366,207 @@ exports.default = AutoComplete;
 /***/ }),
 
 /***/ 113:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _Layer = __webpack_require__(115);
+
+var _Layer2 = _interopRequireDefault(_Layer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* ==========================
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Layer v1.0.1
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * 杨伟韦
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * ========================== */
+
+
+var Component = _react2.default.Component;
+
+var PropTypes = _react2.default.PropTypes;
+var defaultPropTypes = {
+  width: PropTypes.number,
+  height: PropTypes.number,
+  measure: PropTypes.string,
+  visible: PropTypes.bool,
+  showMask: PropTypes.bool,
+  showCloseButton: PropTypes.bool,
+  animation: PropTypes.string,
+  duration: PropTypes.number,
+  className: PropTypes.string,
+  customStyles: PropTypes.object,
+  customMaskStyles: PropTypes.object,
+  onClose: PropTypes.func.isRequired
+};
+
+var defaultProps = {
+  width: 400,
+  height: 240,
+  measure: 'px',
+  visible: false,
+  showMask: true,
+  showCloseButton: true,
+  animation: 'zoom',
+  duration: 300,
+  className: '',
+  customStyles: {},
+  customMaskStyles: {}
+};
+
+var inBrowser = typeof window !== 'undefined';
+var UA = inBrowser && window.navigator.userAgent.toLowerCase();
+var isIE9 = UA && UA.indexOf('msie 9.0') > 0;
+
+var Dialog = function Dialog(props) {
+  var className = 'layer-dialog layer-' + props.animation + '-' + props.animationType;
+  var CloseButton = props.showCloseButton ? _react2.default.createElement('span', { className: 'layer-close', onClick: props.onClose }) : null;
+  var width = props.width,
+      height = props.height,
+      measure = props.measure,
+      duration = props.duration,
+      customStyles = props.customStyles;
+
+  var style = {
+    width: width + measure,
+    height: height + measure,
+    animationDuration: duration + 'ms',
+    WebkitAnimationDuration: duration + 'ms'
+  };
+
+  var mergedStyles = Object.assign(style, customStyles);
+
+  return _react2.default.createElement(
+    'div',
+    { style: mergedStyles, className: className },
+    CloseButton,
+    props.children
+  );
+};
+
+var Layer = function (_React$Component) {
+  _inherits(Layer, _React$Component);
+
+  function Layer(props) {
+    _classCallCheck(this, Layer);
+
+    var _this = _possibleConstructorReturn(this, (Layer.__proto__ || Object.getPrototypeOf(Layer)).call(this, props));
+
+    _this.animationEnd = _this.animationEnd.bind(_this);
+    _this.state = {
+      isShow: false,
+      animationType: 'leave'
+    };
+    return _this;
+  }
+
+  _createClass(Layer, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      if (this.props.visible) {
+        this.enter();
+      }
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      if (!this.props.visible && nextProps.visible) {
+        this.enter();
+      } else if (this.props.visible && !nextProps.visible) {
+        this.leave();
+      }
+    }
+  }, {
+    key: 'enter',
+    value: function enter() {
+      this.setState({
+        isShow: true,
+        animationType: 'enter'
+      });
+    }
+  }, {
+    key: 'leave',
+    value: function leave() {
+      var state = isIE9 ? { isShow: false } : { animationType: 'leave' };
+      this.setState(state);
+    }
+  }, {
+    key: 'animationEnd',
+    value: function animationEnd() {
+      if (this.state.animationType === 'leave') {
+        this.setState({ isShow: false });
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var props = this.props,
+          state = this.state;
+
+      var mask = props.showMask ? _react2.default.createElement('div', { className: 'layer-mask', style: props.customStyles, onClick: props.onClose }) : null;
+      var style = {
+        display: state.isShow ? '' : 'none',
+        WebkitAnimationDuration: props.duration + 'ms',
+        animationDuration: props.duration + 'ms'
+      };
+
+      return _react2.default.createElement(
+        'div',
+        { style: style,
+          className: "layer layer-fade-" + state.animationType + ' ' + props.className,
+          onAnimationEnd: this.animationEnd },
+        mask,
+        _react2.default.createElement(
+          Dialog,
+          _extends({}, props, { animationType: state.animationType }),
+          props.children
+        )
+      );
+    }
+  }]);
+
+  return Layer;
+}(_react2.default.Component);
+
+Layer.PropTypes = defaultPropTypes;
+Layer.defaultProps = defaultProps;
+
+exports.default = Layer;
+
+/***/ }),
+
+/***/ 114:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 235:
+/***/ 115:
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ 237:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(110);
@@ -303,4 +574,4 @@ module.exports = __webpack_require__(110);
 
 /***/ })
 
-},[235]);
+},[237]);
